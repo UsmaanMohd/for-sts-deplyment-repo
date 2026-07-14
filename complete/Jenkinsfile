@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "YOUR_DOCKERHUB_USERNAME/springboot-app"
+        IMAGE_NAME = "usmaan123/springboot-app"
         IMAGE_TAG = "latest"
     }
 
@@ -15,17 +15,21 @@ pipeline {
         }
 
         stage('Build JAR') {
-            steps {
-                sh 'chmod +x mvnw'
-                sh './mvnw clean package'
-            }
+    steps {
+        dir('complete') {
+            sh 'chmod +x mvnw'
+            sh './mvnw clean package'
         }
+    }
+}
 
         stage('Build Docker Image') {
-            steps {
-                sh 'docker build -t $IMAGE_NAME:$IMAGE_TAG .'
-            }
+    steps {
+        dir('complete') {
+            sh 'docker build -t $IMAGE_NAME:$IMAGE_TAG .'
         }
+    }
+}
 
         stage('Docker Hub Login') {
             steps {
